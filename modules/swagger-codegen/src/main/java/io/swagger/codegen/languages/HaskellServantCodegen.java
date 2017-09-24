@@ -102,6 +102,7 @@ public class HaskellServantCodegen extends DefaultCodegen implements CodegenConf
      * Additional Properties.  These values can be passed to the templates and
      * are available in models, apis, and supporting files
      */
+        additionalProperties.put("sourceFolder", sourceFolder);
         additionalProperties.put("apiVersion", apiVersion);
 
     /*
@@ -221,14 +222,21 @@ public class HaskellServantCodegen extends DefaultCodegen implements CodegenConf
             wordsCaps.add(firstLetterToUpper(word));
         }
         String apiName = joinStrings("", wordsCaps);
+        String moduleNameHierarchy = apiName;
+        String moduleNameHierarchyFS = apiName;
 
         // Set the filenames to write for the API
+        String targetSourceFolder = sourceFolder + "/" + moduleNameHierarchyFS;
         supportingFiles.add(new SupportingFile("haskell-servant-codegen.mustache", "", cabalName + ".cabal"));
-        supportingFiles.add(new SupportingFile("API.mustache", "lib/" + apiName, "API.hs"));
-        supportingFiles.add(new SupportingFile("Types.mustache", "lib/" + apiName, "Types.hs"));
+        supportingFiles.add(new SupportingFile("API.mustache", targetSourceFolder, "API.hs"));
+        supportingFiles.add(new SupportingFile("Types.mustache", targetSourceFolder, "Types.hs"));
+        supportingFiles.add(new SupportingFile("Backend.mustache", targetSourceFolder, "Backend.hs"));
+        supportingFiles.add(new SupportingFile("Server.mustache", targetSourceFolder, "Server.hs"));
+        supportingFiles.add(new SupportingFile("Client.mustache", targetSourceFolder, "Client.hs"));
 
 
         additionalProperties.put("title", apiName);
+        additionalProperties.put("modulePrefix", moduleNameHierarchy);
         additionalProperties.put("titleLower", firstLetterToLower(apiName));
         additionalProperties.put("package", cabalName);
 

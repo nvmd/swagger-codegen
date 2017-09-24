@@ -2,7 +2,7 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# OPTIONS_GHC -fno-warn-unused-binds -fno-warn-unused-imports #-}
 
-module {{title}}.Types (
+module {{modulePrefix}}.Types (
 {{#models}}
 {{#model}}
   {{classname}} (..),
@@ -19,8 +19,12 @@ import qualified Data.Text as T
 import qualified Data.Map as Map
 import GHC.Generics (Generic)
 import Data.Function ((&))
+import Data.Time.Calendar (Day (..))
 {{#imports}}import {{import}}
 {{/imports}}
+
+
+type Date = Day  -- manually, swagger-codegen doesn't generate "Date" type for some reason
 
 {{#models}}
 {{#model}}
